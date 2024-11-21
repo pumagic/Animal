@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test de Profil Animal - IA et RH</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -87,6 +86,17 @@
             display: block;
             max-width: 100%;
         }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 8px 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -100,162 +110,59 @@
     </div>
 
     <script>
+        // Liste des questions
         const questions = [
-            { text: "Lorsque je suis confronté à une nouvelle technologie d'IA dans mon travail, je :", answers: [
-                { text: "Analyse ses implications en profondeur avant de l'adopter", value: "hibou" },
-                { text: "L'adopte rapidement pour rester à la pointe", value: "guepard" },
-                { text: "Préfère m'en tenir aux méthodes déjà maîtrisées", value: "castor" },
-                { text: "Cherche à collaborer avec d'autres pour explorer ses possibilités", value: "dauphin" }
-            ]},
-            { text: "Dans un projet impliquant l'IA, je me sens le plus à l'aise quand :", answers: [
-                { text: "Je planifie et anticipe tous les scénarios possibles", value: "hibou" },
-                { text: "Je peux adapter ma stratégie rapidement", value: "guepard" },
-                { text: "Je peux suivre une méthodologie éprouvée", value: "castor" },
-                { text: "Je collabore avec une équipe diverse", value: "dauphin" }
-            ]},
-            { text: "Face à un problème complexe lié à l'IA, ma première réaction est de :", answers: [
-                { text: "Analyser la situation dans son ensemble", value: "hibou" },
-                { text: "Trouver rapidement des solutions innovantes", value: "guepard" },
-                { text: "M'appuyer sur des expériences similaires", value: "castor" },
-                { text: "Consulter d'autres experts ou collègues", value: "dauphin" }
-            ]},
-            { text: "Si je devais choisir un animal qui représente ma façon de travailler avec l'IA, ce serait :", answers: [
-                { text: "Un animal prudent et réfléchi", value: "hibou" },
-                { text: "Un animal rapide et agile", value: "guepard" },
-                { text: "Un animal méthodique et organisé", value: "castor" },
-                { text: "Un animal collaboratif et social", value: "dauphin" }
-            ]},
-            { text: "Dans mon équipe, on me décrit souvent comme quelqu'un qui :", answers: [
-                { text: "Réfléchit longuement avant de prendre des décisions", value: "hibou" },
-                { text: "Est toujours prêt à essayer de nouvelles approches", value: "guepard" },
-                { text: "Maintient une approche constante et fiable", value: "castor" },
-                { text: "Favorise la communication et le travail d'équipe", value: "dauphin" }
-            ]},
-            { text: "Lorsque je découvre un nouvel outil d'IA, je :", answers: [
-                { text: "Lis attentivement la documentation avant de l'essayer", value: "hibou" },
-                { text: "L'explore immédiatement pour voir ce qu'il peut faire", value: "guepard" },
-                { text: "Vérifie s'il est compatible avec mes outils actuels", value: "castor" },
-                { text: "Demande l'avis de mes collègues sur son utilité", value: "dauphin" }
-            ]},
-            { text: "Quand je forme mes collègues à l'utilisation de l'IA, je mets l'accent sur :", answers: [
-                { text: "Les risques potentiels et les précautions à prendre", value: "hibou" },
-                { text: "Les gains de productivité et les nouvelles possibilités", value: "guepard" },
-                { text: "Le respect des procédures et des bonnes pratiques", value: "castor" },
-                { text: "L'importance de la communication et du partage des connaissances", value: "dauphin" }
-            ]},
-            { text: "Si mon entreprise décide de déployer un nouvel outil d'IA, ma première réaction est de :", answers: [
-                { text: "Analyser en détail ses implications sur mon travail", value: "hibou" },
-                { text: "Me porter volontaire pour être parmi les premiers à l'utiliser", value: "guepard" },
-                { text: "Attendre de voir comment il s'intègre dans les processus existants", value: "castor" },
-                { text: "Discuter avec mes collègues de la meilleure façon de l'adopter", value: "dauphin" }
-            ]},
-            { text: "Lorsque je travaille sur un projet d'IA, je préfère :", answers: [
-                { text: "Prendre le temps de bien définir les objectifs et les limites", value: "hibou" },
-                { text: "Commencer rapidement à prototyper et à itérer", value: "guepard" },
-                { text: "Suivre un plan de projet détaillé et structuré", value: "castor" },
-                { text: "Impliquer activement les parties prenantes tout au long du projet", value: "dauphin" }
-            ]},
-            { text: "Quand je réfléchis aux compétences clés pour travailler avec l'IA, je pense avant tout :", answers: [
-                { text: "À la capacité d'analyse et de résolution de problèmes complexes", value: "hibou" },
-                { text: "À la créativité et à l'esprit d'innovation", value: "guepard" },
-                { text: "À la rigueur méthodologique et à la gestion de projet", value: "castor" },
-                { text: "À l'intelligence émotionnelle et aux compétences relationnelles", value: "dauphin" }
-            ]}
-            { text: "Quand je découvre une nouvelle avancée en IA, ma première réaction est :", answers: [
-    { text: "Analyser ses implications éthiques et sociétales", value: "hibou" },
-    { text: "Explorer immédiatement son potentiel", value: "guepard" },
-    { text: "Évaluer si elle peut s'appliquer à mes processus existants", value: "castor" },
-    { text: "En discuter avec mes collègues et amis", value: "dauphin" }
-]},
-{ text: "Lorsque je dois convaincre ma direction d'investir dans l'IA, je mets en avant :", answers: [
-    { text: "Les enjeux stratégiques pour rester compétitif", value: "hibou" },
-    { text: "Les opportunités d'innovation", value: "guepard" },
-    { text: "Les gains d'efficacité et de productivité", value: "castor" },
-    { text: "L'amélioration de l'expérience employé et client", value: "dauphin" }
-]},
-{ text: "Si je devais expliquer l'IA à un non-initié, je mettrais l'accent sur :", answers: [
-    { text: "Ses implications éthiques et les précautions à prendre", value: "hibou" },
-    { text: "Les innovations qu'elle rend possibles", value: "guepard" },
-    { text: "Son fonctionnement technique", value: "castor" },
-    { text: "Les bénéfices qu'elle apporte au quotidien", value: "dauphin" }
-]},
-{ text: "Lorsque je travaille sur un projet, je préfère :", answers: [
-    { text: "Définir précisément les étapes et les objectifs", value: "hibou" },
-    { text: "Prototyper rapidement pour tester", value: "guepard" },
-    { text: "M'appuyer sur des processus bien établis", value: "castor" },
-    { text: "Collaborer avec des parties prenantes variées", value: "dauphin" }
-]},
-{ text: "Dans mon équipe, je suis celui/celle qui :", answers: [
-    { text: "Pose les bonnes questions stratégiques", value: "hibou" },
-    { text: "Propose des idées nouvelles", value: "guepard" },
-    { text: "S'assure que tout est bien structuré et organisé", value: "castor" },
-    { text: "Facilite la communication et la cohésion", value: "dauphin" }
-]},
-{ text: "Quand je pense aux compétences clés pour travailler avec l'IA, je me concentre sur :", answers: [
-    { text: "L'analyse critique et la résolution de problèmes", value: "hibou" },
-    { text: "La créativité et l'innovation", value: "guepard" },
-    { text: "La rigueur méthodologique", value: "castor" },
-    { text: "Les compétences relationnelles", value: "dauphin" }
-]},
-{ text: "Face à un nouvel outil d'IA dans mon entreprise, je suis :", answers: [
-    { text: "Prudent et j'analyse son impact", value: "hibou" },
-    { text: "Excité et prêt à l'essayer immédiatement", value: "guepard" },
-    { text: "Réfléchi et j'attends des résultats concrets", value: "castor" },
-    { text: "Ouvert et curieux de voir son impact collectif", value: "dauphin" }
-]},
-{ text: "Quand je dois choisir un prestataire IA, je privilégie :", answers: [
-    { text: "Sa rigueur méthodologique", value: "hibou" },
-    { text: "Sa créativité et son audace", value: "guepard" },
-    { text: "Sa fiabilité et son expérience", value: "castor" },
-    { text: "Sa capacité à bien collaborer", value: "dauphin" }
-]},
-{ text: "Le plus grand frein à l'adoption de l'IA, selon moi, est :", answers: [
-    { text: "Le manque de compréhension de ses implications", value: "hibou" },
-    { text: "La peur du changement", value: "guepard" },
-    { text: "La complexité technique de son intégration", value: "castor" },
-    { text: "Le besoin de développer de nouvelles compétences", value: "dauphin" }
-]},
-{ text: "Si je devais résumer ma vision de l'IA en une phrase :", answers: [
-    { text: "C'est un outil puissant mais à manier avec précaution", value: "hibou" },
-    { text: "C'est une révolution qui transforme le monde", value: "guepard" },
-    { text: "C'est un moyen d'optimiser les processus", value: "castor" },
-    { text: "C'est une opportunité pour collaborer mieux", value: "dauphin" }
-]}
-
+            { text: "Lorsque je suis confronté à une nouvelle technologie d'IA dans mon travail, je :", options: { hibou: "Analyse en profondeur", guepard: "Adopte rapidement", castor: "Reste avec mes méthodes", dauphin: "Explore avec d'autres" } },
+            { text: "Dans un projet impliquant l'IA, je me sens le plus à l'aise quand :", options: { hibou: "Planifier à l'avance", guepard: "M'adapte rapidement", castor: "Suivre une méthode", dauphin: "Collaborer avec l'équipe" } },
+            { text: "Face à un problème complexe lié à l'IA, ma première réaction est de :", options: { hibou: "Analyser la situation", guepard: "Chercher des solutions", castor: "Me référer au passé", dauphin: "Consulter des experts" } },
+            { text: "Si je devais choisir un animal qui représente ma façon de travailler avec l'IA, ce serait :", options: { hibou: "Prudent et observateur", guepard: "Rapide et agile", castor: "Méthodique et organisé", dauphin: "Collaboratif et créatif" } },
+            { text: "Dans mon équipe, on me décrit souvent comme quelqu'un qui :", options: { hibou: "Réfléchit longtemps", guepard: "Essaye de nouvelles approches", castor: "Fiable et constant", dauphin: "Favorise la communication" } },
+            { text: "Lorsque je découvre un nouvel outil d'IA, je :", options: { hibou: "Lis la documentation", guepard: "L'explore immédiatement", castor: "Vérifie la compatibilité", dauphin: "Demande des avis" } },
+            { text: "Quand je forme mes collègues à l'utilisation de l'IA, je mets l'accent sur :", options: { hibou: "Les risques potentiels", guepard: "Les gains rapides", castor: "Les bonnes pratiques", dauphin: "Le partage des connaissances" } },
+            { text: "Si mon entreprise décide de déployer un nouvel outil d'IA, ma première réaction est de :", options: { hibou: "Analyser les impacts", guepard: "Être le premier à tester", castor: "Attendre l'intégration", dauphin: "Collaborer sur l'adoption" } },
+            { text: "Lorsque je travaille sur un projet d'IA, je préfère :", options: { hibou: "Définir des objectifs", guepard: "Prototyper rapidement", castor: "Suivre un plan", dauphin: "Impliquer les parties prenantes" } },
+            { text: "Si je devais expliquer l'IA à un non-initié, je mettrais l'accent sur :", options: { hibou: "Les enjeux éthiques", guepard: "Les opportunités", castor: "Les aspects techniques", dauphin: "Les bénéfices concrets" } },
+            { text: "Quand je participe à un projet d'IA, je suis souvent celui/celle qui :", options: { hibou: "Pose des questions difficiles", guepard: "Propose des idées nouvelles", castor: "Respecte le planning", dauphin: "Facilite la communication" } },
+            { text: "Quand je pense à l'impact de l'IA sur mon métier, je suis :", options: { hibou: "Vigilant aux changements", guepard: "Enthousiaste pour l'innovation", castor: "Confiant sur mon expertise", dauphin: "Optimiste sur les opportunités" } },
+            { text: "Pour moi, le principal enjeu éthique lié à l'IA est :", options: { hibou: "Protection des données", guepard: "Transparence des décisions", castor: "Responsabilité en cas de problème", dauphin: "Impact sur l'emploi" } },
+            { text: "Quand je pense à la place de l'humain dans un monde automatisé par l'IA, je suis :", options: { hibou: "Inquiet", guepard: "Confiant pour de nouveaux métiers", castor: "Réaliste", dauphin: "Optimiste pour les collaborations" } },
         ];
 
         const profiles = {
-            hibou: { name: "Hibou", description: "Prudent et réfléchi", strengths: ["Analyse", "Gestion des risques"], weaknesses: ["Lenteur", "Opportunités manquées"] },
-            guepard: { name: "Guépard", description: "Rapide et adaptable", strengths: ["Innovation", "Action rapide"], weaknesses: ["Impulsivité", "Détails négligés"] },
-            castor: { name: "Castor", description: "Méthodique et fiable", strengths: ["Rigueur", "Organisation"], weaknesses: ["Rigidité", "Adaptabilité réduite"] },
-            dauphin: { name: "Dauphin", description: "Collaboratif et créatif", strengths: ["Communication", "Créativité"], weaknesses: ["Distraction", "Tâches individuelles négligées"] },
+            hibou: { name: "Hibou", description: "Prudent et réfléchi", strengths: ["Analyse", "Gestion des risques"], weaknesses: ["Lenteur", "Manque d'audace"] },
+            guepard: { name: "Guépard", description: "Rapide et adaptable", strengths: ["Innovation", "Action rapide"], weaknesses: ["Impulsivité", "Manque de détail"] },
+            castor: { name: "Castor", description: "Méthodique et fiable", strengths: ["Organisation", "Rigueur"], weaknesses: ["Rigidité", "Adaptabilité réduite"] },
+            dauphin: { name: "Dauphin", description: "Collaboratif et créatif", strengths: ["Communication", "Créativité"], weaknesses: ["Distraction", "Manque d'individualité"] },
         };
 
         const quizForm = document.getElementById("quiz-form");
         const questionsList = document.getElementById("questions-list");
         const resultDiv = document.getElementById("result");
 
-        // Génération dynamique des questions
+        // Générer les questions
         questions.forEach((question, index) => {
-            const questionItem = document.createElement("li");
-            questionItem.innerHTML = `<p>${question.text}</p>`;
-            question.answers.forEach((answer, idx) => {
-                questionItem.innerHTML += `
-                    <input type="radio" id="q${index}_${idx}" name="q${index}" value="${answer.value}">
-                    <label for="q${index}_${idx}">${answer.text}</label>
+            const li = document.createElement("li");
+            li.innerHTML = `<p>${question.text}</p>`;
+            for (let key in question.options) {
+                li.innerHTML += `
+                    <input type="radio" id="q${index}_${key}" name="q${index}" value="${key}">
+                    <label for="q${index}_${key}">${question.options[key]}</label>
                 `;
-            });
-            questionsList.appendChild(questionItem);
+            }
+            questionsList.appendChild(li);
         });
 
-        // Résultat
+        // Calcul des résultats
         quizForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            const scores = { hibou: 0, guepard: 0, castor: 0, dauphin: 0 };
+
+            let scores = { hibou: 0, guepard: 0, castor: 0, dauphin: 0 };
 
             questions.forEach((_, index) => {
-                const answer = document.querySelector(`input[name="q${index}"]:checked`);
-                if (answer) scores[answer.value]++;
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected) {
+                    scores[selected.value]++;
+                }
             });
 
             const maxProfile = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
@@ -265,9 +172,9 @@
                 <h2>Votre profil : ${result.name}</h2>
                 <p>${result.description}</p>
                 <h3>Points forts :</h3>
-                <ul>${result.strengths.map((s) => `<li>${s}</li>`).join("")}</ul>
+                <ul>${result.strengths.map(s => `<li>${s}</li>`).join("")}</ul>
                 <h3>Axes d'amélioration :</h3>
-                <ul>${result.weaknesses.map((w) => `<li>${w}</li>`).join("")}</ul>
+                <ul>${result.weaknesses.map(w => `<li>${w}</li>`).join("")}</ul>
             `;
         });
     </script>
