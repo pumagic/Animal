@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Profil Animal - IA et RH</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4caf50;
+            margin-bottom: 20px;
+        }
+
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            padding: 8px 10px;
+            margin-bottom: 5px;
+            background: #333;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #fff;
+            transition: background 0.3s;
+        }
+
+        label:hover {
+            background: #444;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked + label {
+            background: #4caf50;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        canvas {
+            margin: 20px auto;
+            display: block;
+            max-width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test de Profil Animal - IA et RH</h1>
+        <form id="quiz-form">
+            <ol id="questions-list"></ol>
+            <button type="submit">Voir mon résultat</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Tableau des 20 questions
+        const questions = [
+            { text: "Lorsque je suis confronté à une nouvelle technologie d'IA dans mon travail, je :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Dans un projet impliquant l'IA, je me sens le plus à l'aise quand :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Face à un problème complexe lié à l'IA, ma première réaction est de :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Si je devais choisir un animal qui représente ma façon de travailler avec l'IA, ce serait :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Dans mon équipe, on me décrit souvent comme quelqu'un qui :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Lorsque je découvre un nouvel outil d'IA, je :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Quand je forme mes collègues à l'utilisation de l'IA, je mets l'accent sur :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Si mon entreprise décide de déployer un nouvel outil d'IA, ma première réaction est de :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Lorsque je travaille sur un projet d'IA, je préfère :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Si je devais expliquer l'IA à un non-initié, je mettrais l'accent sur :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Quand je dois choisir un prestataire pour un projet d'IA, je privilégie :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Si j'étais responsable de la stratégie IA de mon entreprise, je mettrais la priorité sur :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Quand je participe à un projet d'IA, je suis souvent celui/celle qui :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Si je devais recruter un profil pour un projet d'IA, je choisirais quelqu'un qui :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Quand je réfléchis aux compétences clés pour travailler avec l'IA, je pense avant tout :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Pour moi, le principal bénéfice de l'IA en entreprise est :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Quand j'entends parler d'une nouvelle avancée en IA, ma première réaction est de :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Si je devais convaincre ma direction d'investir dans l'IA, je mettrais en avant :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Quand je pense aux métiers qui seront les plus impactés par l'IA, je pense en premier à :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+            { text: "Pour moi, le plus grand frein à l'adoption de l'IA en entreprise est :", answers: ["hibou", "guepard", "castor", "dauphin"] },
+        ];
+
+        // Profils et descriptions
+        const profiles = {
+            hibou: { name: "Hibou", description: "Prudent et réfléchi", strengths: ["Analyse approfondie", "Gestion des risques"], weaknesses: ["Peut manquer d'initiative", "Lent à agir"] },
+            guepard: { name: "Guépard", description: "Rapide et adaptable", strengths: ["Agilité", "Prise d'initiative"], weaknesses: ["Manque de planification", "Impulsivité"] },
+            castor: { name: "Castor", description: "Méthodique et fiable", strengths: ["Organisation", "Stabilité"], weaknesses: ["Rigidité", "Peu d'innovation"] },
+            dauphin: { name: "Dauphin", description: "Collaboratif et innovant", strengths: ["Communication", "Créativité"], weaknesses: ["Difficulté à se concentrer", "Éparpillement"] },
+        };
+
+        const quizForm = document.getElementById("quiz-form");
+        const questionsList = document.getElementById("questions-list");
+        const resultDiv = document.getElementById("result");
+
+        // Génération des questions
+        questions.forEach((question, index) => {
+            const questionItem = document.createElement("li");
+            questionItem.innerHTML = `<p>${question.text}</p>`;
+            question.answers.forEach(answer => {
+                questionItem.innerHTML += `
+                    <input type="radio" id="q${index}_${answer}" name="q${index}" value="${answer}">
+                    <label for="q${index}_${answer}">${profiles[answer].name}</label>
+                `;
+            });
+            questionsList.appendChild(questionItem);
+        });
+
+        // Génération des résultats
+        quizForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const scores = { hibou: 0, guepard: 0, castor: 0, dauphin: 0 };
+            questions.forEach((_, index) => {
+                const answer = document.querySelector(`input[name="q${index}"]:checked`);
+                if (answer) scores[answer.value]++;
+            });
+
+            const maxProfile = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+
+            const result = profiles[maxProfile];
+            resultDiv.innerHTML = `
+                <h2>Votre profil : ${result.name}</h2>
+                <p>${result.description}</p>
+                <h3>Points forts :</h3>
+                <ul>${result.strengths.map(s => `<li>${s}</li>`).join("")}</ul>
+                <h3>Axes d'amélioration :</h3>
+                <ul>${result.weaknesses.map(w => `<li>${w}</li>`).join("")}</ul>
+                <canvas id="resultChart"></canvas>
+            `;
+
+            const ctx = document.getElementById("resultChart").getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: Object.keys(profiles).map(p => profiles[p].name),
+                    datasets: [{
+                        label: "Scores",
+                        data: Object.values(scores),
+                        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
+                    }],
+                },
+            });
+        });
+    </script>
+</body>
+</html>
